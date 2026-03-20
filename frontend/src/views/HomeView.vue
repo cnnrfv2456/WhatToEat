@@ -241,7 +241,10 @@ watch(
   }
 
   .header-brand {
-    font-size: 18px;
+    position: static;
+    transform: none;
+    font-size: 16px;
+    flex: 1;
   }
 
   .header-user {
