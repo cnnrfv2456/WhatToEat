@@ -23,8 +23,10 @@ services:
       - laravel_app:/var/www
       - frontend_dist:/usr/share/nginx/html:ro
     depends_on:
-      - backend
-      - frontend
+      backend:
+        condition: service_started
+      frontend:
+        condition: service_completed_successfully
     networks:
       - wte_network
     restart: unless-stopped
