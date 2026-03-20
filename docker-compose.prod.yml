@@ -65,6 +65,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
+      start_period: 60s
     networks:
       - wte_network
     restart: unless-stopped
