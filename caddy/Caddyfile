@@ -1,0 +1,13 @@
+wwttee.com {
+    handle /api* {
+        root * /var/www/public
+        rewrite * /index.php
+        php_fastcgi backend:9000
+    }
+
+    handle {
+        root * /var/www/frontend
+        try_files {path} /index.html
+        file_server
+    }
+}
