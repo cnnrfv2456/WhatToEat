@@ -74,10 +74,13 @@
       <span v-else>幫我選一家！</span>
     </button>
   </div>
+
+  <AlertDialog ref="alertRef" />
 </template>
 
 <script setup>
-import { reactive } from 'vue'
+import { ref, reactive } from 'vue'
+import AlertDialog from '@/components/AlertDialog.vue'
 
 const props = defineProps({
   loading: {
@@ -87,6 +90,8 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['search'])
+
+const alertRef = ref(null)
 
 const filters = reactive({
   distance: 1000,
@@ -99,7 +104,7 @@ const filters = reactive({
 
 function handleSearch() {
   if (!filters.distance || filters.distance < 100) {
-    alert('請輸入搜尋距離（至少 100 公尺）')
+    alertRef.value.show('請輸入搜尋距離（至少 100 公尺）')
     return
   }
   emit('search', { ...filters })

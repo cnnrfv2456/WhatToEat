@@ -32,6 +32,7 @@
 
     <RestaurantDialog />
     <FavoritesSidebar :open="showFavorites" @close="showFavorites = false" />
+    <AlertDialog ref="alertRef" />
   </div>
 </template>
 
@@ -44,6 +45,7 @@ import FilterForm from '@/components/FilterForm.vue'
 import RestaurantDialog from '@/components/RestaurantDialog.vue'
 import HistoryList from '@/components/HistoryList.vue'
 import FavoritesSidebar from '@/components/FavoritesSidebar.vue'
+import AlertDialog from '@/components/AlertDialog.vue'
 
 const auth = useAuthStore()
 const restaurant = useRestaurantStore()
@@ -53,6 +55,7 @@ const userLocation = ref(null)
 const searching = ref(false)
 const lastFilters = ref(null)
 const showFavorites = ref(false)
+const alertRef = ref(null)
 
 onMounted(async () => {
   await auth.fetchUser()
@@ -65,7 +68,7 @@ function onLocationChanged(location) {
 
 async function onSearch(filters) {
   if (!userLocation.value) {
-    alert('請先允許位置存取權限，並等待地圖定位完成')
+    alertRef.value.show('請先允許位置存取權限，並等待地圖定位完成')
     return
   }
 
@@ -76,7 +79,7 @@ async function onSearch(filters) {
     const results = await mapRef.value.searchNearby(userLocation.value, filters)
 
     if (results.length === 0) {
-      alert('找不到符合條件的餐廳，請調整篩選條件')
+      alertRef.value.show('找不到符合條件的餐廳，請調整篩選條件')
       return
     }
 
@@ -101,7 +104,7 @@ async function onSearch(filters) {
     await restaurant.saveToHistory(restaurantData)
   } catch (err) {
     console.error(err)
-    alert('搜尋失敗，請稍後再試')
+    alertRef.value.show('搜尋失敗，請稍後再試')
   } finally {
     searching.value = false
   }
